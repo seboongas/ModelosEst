@@ -1,0 +1,52 @@
+Dimensiones: (506, 13);  valores faltantes: 0
+
+Resumen de medv:
+count    506.00
+mean      22.53
+std        9.20
+min        5.00
+25%       17.02
+50%       21.20
+75%       25.00
+max       50.00
+
+Correlación con medv:
+lstat     -0.738
+ptratio   -0.508
+indus     -0.484
+tax       -0.469
+nox       -0.427
+crim      -0.388
+rad       -0.382
+age       -0.377
+chas       0.175
+dis        0.250
+zn         0.360
+rm         0.695
+
+Viviendas con medv = 50 (valor tope): 16
+
+Entrenamiento: 404 filas;  validación: 102 filas
+
+Mínimos cuadrados (sin regularizar):
+ grado  #atributos   MSE train   MSE valid
+     1          12       22.60       22.78
+     2          90        5.72       15.16
+     3         454        0.46     1175.60
+
+Ridge (lambda elegido por CV 5-fold en entrenamiento):
+ grado    lambda*    MSE CV   MSE train   MSE valid
+     1      3.981     25.28       22.62       22.91
+     2      0.398     16.07        6.80       11.94
+     3      1.000     18.06        4.22       10.73
+
+Mejor MCO (por validación): grado 2.  Mejor Ridge (por CV): grado 2, lambda = 0.398
+
+Robustez (30 particiones aleatorias, lambda fijo = el elegido por CV): MSE de validación
+          mediana    media   desvío
+MCO g1      25.04    25.60     6.68
+Ridge g1    24.90    25.56     6.82
+MCO g2      13.46    14.43     4.41
+Ridge g2    11.68    13.03     3.82
+MCO g3    1681.09  3503.85  5588.11
+Ridge g3    12.30    14.09     5.62

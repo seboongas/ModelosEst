@@ -1,0 +1,17 @@
+E[X] simulado = -0.1144  (teórico theta/3 = -0.1111)
+Muestra 1 (n=10): theta_hat (golden) = -0.21746 | scipy = -0.21746
+Muestra 2 (n=10): theta_hat (golden) = -1.00000 | scipy = -1.00000
+Muestra 3 (n=10): theta_hat (golden) = 0.34149 | scipy = 0.34149
+
+Monte Carlo con M = 1000 muestras por tamaño
+     n  media(theta_hat)     sesgo   varianza        MSE  %en borde
+    10           -0.3450   -0.0117    0.27378    0.27392      18.6%
+   100           -0.3327    0.0006    0.02787    0.02787       0.0%
+  1000           -0.3324    0.0009    0.00284    0.00284       0.0%
+
+(n=10, M=50)   sesgo=0.1635  var=0.22737  MSE=0.25409
+
+Información de Fisher I(theta) = 0.3575;  1/I = 2.7973
+  n=  10:  n*Var simulada = 2.738   (teoría asintótica 1/I = 2.797)
+  n= 100:  n*Var simulada = 2.787   (teoría asintótica 1/I = 2.797)
+  n=1000:  n*Var simulada = 2.839   (teoría asintótica 1/I = 2.797)

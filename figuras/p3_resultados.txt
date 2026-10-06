@@ -1,0 +1,103 @@
+Respuestas: 45
+Valores faltantes por columna:
+id       0
+hijo     1
+sexo     1
+padre    0
+madre    0
+Filas con faltantes (id): [4, 36]
+
+Filas usadas: 43  (mujeres: 7, varones: 36)
+
+Resumen por sexo:
+            hijo       padre        madre     
+            mean  std   mean   std   mean  std
+sexo                                          
+Femenino   162.9  6.8  180.6  13.3  165.3  3.9
+Masculino  179.2  4.8  178.1   6.2  163.9  5.4
+
+Correlaciones:
+       hijo  padre  madre  mujer
+hijo   1.00   0.20   0.18  -0.77
+padre  0.20   1.00   0.16   0.12
+madre  0.18   0.16   1.00   0.10
+mujer -0.77   0.12   0.10   1.00
+
+Comparación de modelos (45 - 2 = 43 observaciones):
+                                  R2 ajust.     AIC  sigma (cm)  LOOCV MSE
+modelo                                                                    
+M1: padre                              0.02  301.12        7.84      65.78
+M2: padre + madre                      0.02  302.09        7.85      67.15
+M3: sexo                               0.58  264.31        5.11      28.34
+M4: padre + sexo                       0.66  255.84        4.58      23.70
+M5: padre + madre + sexo               0.71  251.08        4.29      21.58
+M6: M5 + padre:sexo + madre:sexo       0.69  254.79        4.39      29.07
+
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                   hijo   R-squared:                       0.727
+Model:                            OLS   Adj. R-squared:                  0.706
+Method:                 Least Squares   F-statistic:                     34.63
+Date:                Tue, 06 Oct 2026   Prob (F-statistic):           4.39e-11
+Time:                        13:48:56   Log-Likelihood:                -121.54
+No. Observations:                  43   AIC:                             251.1
+Df Residuals:                      39   BIC:                             258.1
+Df Model:                           3                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+Intercept     74.4341     24.726      3.010      0.005      24.421     124.447
+padre          0.2775      0.089      3.135      0.003       0.098       0.457
+madre          0.3373      0.131      2.576      0.014       0.072       0.602
+mujer        -17.4370      1.791     -9.736      0.000     -21.060     -13.814
+==============================================================================
+Omnibus:                        0.118   Durbin-Watson:                   1.577
+Prob(Omnibus):                  0.943   Jarque-Bera (JB):                0.330
+Skew:                           0.013   Prob(JB):                        0.848
+Kurtosis:                       2.572   Cond. No.                     9.17e+03
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+[2] The condition number is large, 9.17e+03. This might indicate that there are
+strong multicollinearity or other numerical problems.
+
+Intervalos de confianza 95 %:
+               0       1
+Intercept  24.42  124.45
+padre       0.10    0.46
+madre       0.07    0.60
+mujer     -21.06  -13.81
+
+Promedios: padre = 178.5 cm, madre = 164.2 cm
+Modelo con padre/madre centrados (mismos coeficientes salvo el intercepto):
+Intercept    179.350
+padre_c        0.278
+madre_c        0.337
+mujer        -17.437
+
+Observaciones más influyentes (distancia de Cook):
+    id   hijo       sexo  padre  madre  cook  estud
+38  39  177.0   Femenino    198    166  0.57   2.66
+34  35  160.0   Femenino    158    163  0.20   1.22
+15  16  170.0  Masculino    187    158  0.16  -2.53
+39  40  163.0   Femenino    193    168  0.08  -1.11
+44  45  190.0  Masculino    182    170  0.06   1.92
+Umbral orientativo de Cook 4/n = 0.093
+
+Observaciones sobre el umbral de Cook o con |residuo estud.| > 2: [16, 35, 39]
+
+Sensibilidad: modelo M5 sin la observación id=39:
+           con todos  sin esa obs.  ee con  ee sin
+Intercept     74.434        88.811  24.726  23.628
+padre          0.278         0.186   0.089   0.089
+madre          0.337         0.349   0.131   0.122
+mujer        -17.437       -19.005   1.791   1.767
+ sigma con = 4.29  sin = 3.99   R2aj con = 0.706  sin = 0.752
+
+Sensibilidad: agregando id=4 como varón:
+Intercept    95.516
+padre         0.308
+madre         0.174
+mujer       -16.994
