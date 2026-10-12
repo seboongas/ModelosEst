@@ -74,7 +74,7 @@ $n$ & media de $\hat\theta$ & sesgo & varianza & MSE & $n\cdot$var \\
 {\small Figura 2. Distribución de $\hat\theta$ en las 1000 muestras, para cada $n$ (la línea roja es $\theta=-1/3$).}
 \end{center}
 
-\textbf{Conclusiones.} El sesgo es chico en los tres casos: queda dentro de un error estándar de la simulación ($0{,}017$; $0{,}005$ y $0{,}002$), así que no podemos distinguirlo de cero. Esto va con que el MLE es asintóticamente insesgado. Lo que sí cambia mucho es la varianza: se divide por 10 cada vez que $n$ se multiplica por 10. De hecho $n\cdot\mathrm{var}$ queda cerca de $2{,}8$, que es $1/I(\theta)$ con $I(\theta)=\tfrac12\int_{-1}^1\tfrac{x^2}{1+\theta x}dx=0{,}3575$ (la información de Fisher). Como el sesgo es casi nulo, el MSE es básicamente la varianza. Además, con $n=10$ la distribución de $\hat\theta$ no se parece a una normal porque se amontona en $\pm1$, mientras que con $n\ge100$ ya se ve parecida a una normal centrada en $-1/3$.
+\textbf{Conclusiones.} El sesgo es chico en los tres casos: queda dentro de un error estándar de la simulación ($0{,}017$; $0{,}005$ y $0{,}002$), así que no podemos distinguirlo de cero. Eso es lo que se espera de un MLE. Lo que sí cambia mucho es la varianza: se divide por 10 cada vez que $n$ se multiplica por 10, o sea que baja como $1/n$ (por eso $n\cdot\mathrm{var}$ queda siempre cerca de $2{,}8$). Como el sesgo es casi nulo, el MSE es básicamente la varianza. Además, con $n=10$ la distribución de $\hat\theta$ no se parece a una normal porque se amontona en $\pm1$, mientras que con $n\ge100$ ya se ve parecida a una normal centrada en $-1/3$.
 
 \newpage
 %==========================================================================
@@ -82,11 +82,11 @@ $n$ & media de $\hat\theta$ & sesgo & varianza & MSE & $n\cdot$var \\
 \textbf{Datos y exploración.} Usamos el dataset \texttt{Boston} del paquete ISLP (506 viviendas, 12 atributos y \texttt{medv}, sin datos faltantes). Esta versión no trae la variable \texttt{B} del dataset original. \texttt{medv} tiene la cola larga hacia la derecha y 16 viviendas valen exactamente 50, que parece ser un tope. Las variables más correlacionadas con \texttt{medv} son \texttt{lstat} ($-0{,}74$), \texttt{rm} ($0{,}70$) y \texttt{ptratio} ($-0{,}51$). La relación con \texttt{lstat} se ve claramente curva, lo cual es una buena razón para probar polinomios.
 
 \begin{center}
-\includegraphics[width=0.92\textwidth]{../figuras/p2_eda.png}\\
+\includegraphics[width=0.78\textwidth]{../figuras/p2_eda.png}\\
 {\small Figura 3. Exploración inicial: distribución de MEDV y las dos relaciones más fuertes.}
 \end{center}
 
-\textbf{Qué hicimos.} Separamos los datos al azar en 80\,\% para entrenamiento (404) y 20\,\% para validación (102), con semilla 42. Todos los modelos siguen el mismo esquema: características polinomiales, estandarización y regresión (MCO o Ridge). El $\lambda$ de Ridge lo elegimos con validación cruzada de 5 folds usando solo el conjunto de entrenamiento, para no usar la validación en la elección. Tengamos en cuenta que con grado 3 hay 454 atributos y solo 404 observaciones.
+\textbf{Qué hicimos.} Separamos los datos al azar en 80\,\% para entrenamiento (404) y 20\,\% para validación (102), con semilla 42. Todos los modelos siguen el mismo esquema: características polinomiales, estandarización y regresión (MCO o Ridge). El $\lambda$ de Ridge lo elegimos con validación cruzada de 5 folds usando solo el conjunto de entrenamiento, para no usar la validación en la elección. Ojo que con grado 3 hay 454 atributos y solo 404 observaciones.
 
 \begin{center}
 \small
@@ -112,43 +112,43 @@ Grado & \#atrib. & MSE entr. & MSE valid. & $\lambda^*$ & MSE CV & MSE entr. & M
 
 Ridge arregla justamente ese problema. Con grado 2 el MSE de validación baja de 15,2 a 11,9, y con grado 3 pasa de 1176 a 10,7. En grado 1 casi no cambia nada, lo cual tiene sentido porque con solo 12 atributos no hay mucho que penalizar.
 
-Para nosotros el mejor modelo es Ridge con polinomio de grado 2 y $\lambda\approx0{,}4$, porque tiene el menor MSE de validación cruzada (16,1 contra 18,1 del grado 3). En esta partición el grado 3 con Ridge dio un MSE de validación un poco menor (10,7 contra 11,9), así que para ver si era una diferencia real repetimos todo con 30 particiones al azar. Ahí las medianas fueron 11,7 (grado 2) y 12,3 (grado 3), con desvíos de 3,8 y 5,6, o sea que la diferencia se pierde en el ruido y nos quedamos con el más simple. Como referencia, la mediana del MCO de grado 3 en esas particiones fue 1681.
+Para nosotros el mejor modelo es Ridge con polinomio de grado 2 y $\lambda\approx0{,}4$, porque tiene el menor MSE de validación cruzada (16,1 contra 18,1 del grado 3). En esta partición el grado 3 con Ridge dio un MSE de validación un poco menor (10,7 contra 11,9), así que para ver si era una diferencia real repetimos todo con 30 particiones al azar. Ahí las medianas fueron 11,7 (grado 2) y 12,3 (grado 3), con desvíos de 3,8 y 5,6, o sea que la diferencia se pierde en el ruido y nos quedamos con el más simple.
 
-Una limitación: como el valor máximo de \texttt{medv} está cortado en 50, el modelo subestima esas viviendas (se ven los puntos de abajo a la derecha en la Fig.~4). Además, el MSE de una sola partición es bastante ruidoso.
+Una limitación: como \texttt{medv} está cortado en 50, el modelo subestima esas viviendas (puntos de abajo a la derecha en la Fig.~4), y el MSE de una sola partición es bastante ruidoso.
 
 \newpage
 %==========================================================================
 \section{Alturas}
-\textbf{Datos y decisiones.} Hay 45 respuestas. Sacamos 2: el id 36 no tiene la altura del estudiante y el id 4 no tiene el sexo. Quedaron 43 (36 varones y 7 mujeres). La altura depende mucho del sexo (en promedio 179,2 cm los varones y 162,9 cm las mujeres), así que lo incluimos como variable indicadora. No agregamos pendientes distintas por sexo (interacciones) porque hay apenas 7 mujeres, y además ese modelo salió peor en el error de validación cruzada leave-one-out (29,1 contra 21,6) y en el AIC. Comparamos varios modelos con el $R^2$ ajustado, el AIC y ese error LOO:
+\textbf{Datos y decisiones.} Hay 45 respuestas. Sacamos 2: el id 36 no tiene la altura del estudiante y el id 4 no tiene el sexo. Quedaron 43 (36 varones y 7 mujeres). La altura depende mucho del sexo (en promedio 179,2 cm los varones y 162,9 cm las mujeres), así que lo incluimos como variable indicadora. No agregamos pendientes distintas para cada sexo porque hay solo 7 mujeres, y además ese modelo dio peor error de validación cruzada leave-one-out (29,1 contra 21,6). Probamos varios modelos y los comparamos con el $R^2$ ajustado, el error típico de los residuos ($\hat\sigma$) y ese error LOO:
 
 \begin{center}
 \small
-\begin{tabular}{lrrrr}
+\begin{tabular}{lrrr}
 \toprule
-Modelo para la altura del estudiante & $R^2$ ajust. & AIC & $\hat\sigma$ (cm) & ECM LOO \\
+Modelo para la altura del estudiante & $R^2$ ajust. & $\hat\sigma$ (cm) & ECM LOO \\
 \midrule
-padre                      & 0,02 & 301,1 & 7,84 & 65,8 \\
-padre + madre              & 0,02 & 302,1 & 7,85 & 67,2 \\
-sexo                       & 0,58 & 264,3 & 5,11 & 28,3 \\
-padre + sexo               & 0,66 & 255,8 & 4,58 & 23,7 \\
-\textbf{padre + madre + sexo} & \textbf{0,71} & \textbf{251,1} & \textbf{4,29} & \textbf{21,6} \\
-padre + madre + sexo + interacciones & 0,69 & 254,8 & 4,39 & 29,1 \\
+padre                      & 0,02 & 7,84 & 65,8 \\
+padre + madre              & 0,02 & 7,85 & 67,2 \\
+sexo                       & 0,58 & 5,11 & 28,3 \\
+padre + sexo               & 0,66 & 4,58 & 23,7 \\
+\textbf{padre + madre + sexo} & \textbf{0,71} & \textbf{4,29} & \textbf{21,6} \\
+padre + madre + sexo + interacciones & 0,69 & 4,39 & 29,1 \\
 \bottomrule
 \end{tabular}
 \end{center}
 
-Una cosa que nos llamó la atención es que sin el sexo las alturas de los padres no explican nada ($R^2$ ajustado de 0,02). Recién aportan cuando se controla por sexo.
+Nos llamó la atención que sin el sexo las alturas de los padres no explican nada ($R^2$ ajustado de 0,02). Recién aportan cuando se controla por sexo.
 
 \begin{center}
 \includegraphics[width=\textwidth]{../figuras/p3_alturas.png}\\
 {\small Figura 5. Altura del estudiante contra la del padre y la de la madre (por sexo), y ajustado vs.\ real del modelo elegido.}
 \end{center}
 
-\textbf{Modelo elegido.} Ajustamos por mínimos cuadrados con las 43 observaciones ($\hat\sigma=4{,}3$ cm, $R^2$ ajustado $0{,}71$; los residuos no muestran señales de alejarse de la normalidad):
+\textbf{Modelo elegido.} Ajustamos por mínimos cuadrados con las 43 observaciones ($\hat\sigma=4{,}3$ cm, $R^2$ ajustado $0{,}71$):
 \[
 \widehat{\text{altura}} \;=\; 74{,}4 \;+\; 0{,}278\,\text{padre} \;+\; 0{,}337\,\text{madre} \;-\; 17{,}4\,\text{mujer}
 \]
-con las alturas en cm y $\text{mujer}=1$ si el estudiante es de sexo femenino y 0 si es masculino. Los intervalos de confianza del 95\,\% van entre corchetes.
+con las alturas en cm y $\text{mujer}=1$ si el estudiante es de sexo femenino y 0 si es masculino. Entre corchetes van los intervalos de confianza del 95\,\%.
 
 \textbf{Qué significa cada coeficiente.}
 \begin{itemize}
@@ -160,6 +160,6 @@ con las alturas en cm y $\text{mujer}=1$ si el estudiante es de sexo femenino y 
 
 \textbf{Conclusiones.} Los coeficientes de padre y madre suman $0{,}62$, menor que 1: un estudiante con padres muy altos tiende a ser alto, pero menos que ellos, lo que se parece a la regresión a la media. Son asociaciones y no hay que leerlas como efectos causales.
 
-Con solo 43 datos el modelo es frágil. El id 39 (mujer de 177 cm con padre de 198 cm) es el punto más influyente, con distancia de Cook 0,57 (el umbral orientativo $4/n$ es 0,09). Si lo sacamos, el coeficiente del padre baja de 0,28 a 0,19 y el $R^2$ ajustado sube a 0,75. Decidimos dejarlo porque los datos son plausibles (el padre es muy alto) y no hay motivo para pensar que es un error de carga. El id 16 (varón de 170 cm con padre de 187 cm) es el otro residuo grande. También probamos agregar el id 4 como varón, y ahí el coeficiente de la madre baja de 0,34 a 0,17, o sea que es el menos estable de todos. Por último, los datos son de estudiantes del curso y no una muestra aleatoria, así que no conviene extrapolar el modelo a otra población.
+Con solo 43 datos el modelo es frágil. El id 39 (mujer de 177 cm con padre de 198 cm) es el punto que más influye en el ajuste: si lo sacamos, el coeficiente del padre baja de 0,28 a 0,19 y el $R^2$ ajustado sube a 0,75. Decidimos dejarlo porque los datos son plausibles (el padre es muy alto) y no hay motivo para pensar que es un error de carga. El id 16 (varón de 170 cm con padre de 187 cm) es el otro residuo grande. También probamos agregar el id 4 como varón, y ahí el coeficiente de la madre baja de 0,34 a 0,17, o sea que es el menos estable de todos. Por último, los datos son de estudiantes del curso y no una muestra aleatoria, así que no conviene extrapolar el modelo a otra población.
 
 \end{document}
